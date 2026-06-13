@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useIsMobile } from '@/hooks/use-mobile'
+import { MoreHorizontal } from 'lucide-react'
 import Particles, { initParticlesEngine } from '@tsparticles/react'
 import { loadSlim } from '@tsparticles/slim'
 import Hero from '@/components/ui/animated-shader-hero'
@@ -82,6 +83,7 @@ const NAV_LINKS: { label: string; page: Page }[] = [
 function Navbar({ activePage, onNavigate }: { activePage: Page; onNavigate: (p: Page) => void }) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -89,8 +91,16 @@ function Navbar({ activePage, onNavigate }: { activePage: Page; onNavigate: (p: 
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // close when clicking outside the nav
+  useEffect(() => {
+    if (!open) return
+    const close = () => setOpen(false)
+    document.addEventListener('click', close)
+    return () => document.removeEventListener('click', close)
+  }, [open])
+
   const getPillStyle = (isActive: boolean): React.CSSProperties => ({
-    padding: '0.5rem 1.25rem',
+    padding: '0.65rem 1.25rem',
     borderRadius: '9999px',
     fontSize: '0.9rem',
     fontWeight: 600,
@@ -99,8 +109,8 @@ function Navbar({ activePage, onNavigate }: { activePage: Page; onNavigate: (p: 
     background: isActive ? 'rgba(249,115,22,0.22)' : 'rgba(249,115,22,0.08)',
     color: isActive ? '#ffffff' : 'rgb(254,215,170)',
     backdropFilter: 'blur(6px)',
-    transition: 'background 0.2s, transform 0.15s, border-color 0.2s',
-    whiteSpace: 'nowrap',
+    transition: 'background 0.2s, border-color 0.2s',
+    whiteSpace: 'nowrap' as const,
     fontFamily: 'inherit',
   })
 
@@ -108,7 +118,6 @@ function Navbar({ activePage, onNavigate }: { activePage: Page; onNavigate: (p: 
     if (page === 'about') {
       onNavigate('home')
       setOpen(false)
-      // give the home page a tick to render before scrolling
       setTimeout(() => {
         document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })
       }, 80)
@@ -120,46 +129,19 @@ function Navbar({ activePage, onNavigate }: { activePage: Page; onNavigate: (p: 
   }
 
   return (
-    <nav style={{
-      position: 'fixed', top: 0, width: '100%', zIndex: 1000,
-      background: scrolled ? 'rgba(5,5,5,0.92)' : 'rgba(5,5,5,0.6)',
-      backdropFilter: 'blur(14px)',
-      borderBottom: scrolled ? '1px solid rgba(253,186,116,0.15)' : '1px solid transparent',
-      transition: 'all 0.3s ease',
-    }}>
-      {/* Desktop */}
+    <nav
+      onClick={e => e.stopPropagation()}
+      style={{
+        position: 'fixed', top: 0, width: '100%', zIndex: 1000,
+        background: scrolled ? 'rgba(5,5,5,0.92)' : 'rgba(5,5,5,0.6)',
+        backdropFilter: 'blur(14px)',
+        borderBottom: scrolled ? '1px solid rgba(253,186,116,0.15)' : '1px solid transparent',
+        transition: 'background 0.3s ease, border-color 0.3s ease',
+      }}
+    >
+      {/* ── Top bar (logo left, toggle right) ── */}
       <div style={{
-        maxWidth: 1100, margin: '0 auto', padding: '0.45rem 2rem',
-        display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.75rem',
-      }} className="hidden sm:flex">
-        {NAV_LINKS.map(({ label, page }) => (
-          <button
-            key={page}
-            onClick={() => navigate(page)}
-            style={getPillStyle(activePage === page)}
-            onMouseEnter={e => {
-              if (activePage !== page) {
-                e.currentTarget.style.background = 'rgba(249,115,22,0.22)'
-                e.currentTarget.style.borderColor = 'rgba(253,186,116,0.7)'
-              }
-              e.currentTarget.style.transform = 'translateY(-1px)'
-            }}
-            onMouseLeave={e => {
-              if (activePage !== page) {
-                e.currentTarget.style.background = 'rgba(249,115,22,0.08)'
-                e.currentTarget.style.borderColor = 'rgba(253,186,116,0.35)'
-              }
-              e.currentTarget.style.transform = 'translateY(0)'
-            }}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-
-      {/* Mobile bar — logo + hamburger */}
-      <div className="sm:hidden" style={{
-        padding: '0.4rem 1.25rem',
+        maxWidth: 1100, margin: '0 auto', padding: '0 1.5rem',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         minHeight: 52,
       }}>
@@ -178,46 +160,78 @@ function Navbar({ activePage, onNavigate }: { activePage: Page; onNavigate: (p: 
           onClick={() => setOpen(o => !o)}
           aria-label={open ? 'Close menu' : 'Open menu'}
           style={{
-            background: 'none', border: 'none', cursor: 'pointer',
-            display: 'flex', flexDirection: 'column', gap: '5px', padding: '8px',
+            background: open ? 'rgba(249,115,22,0.12)' : 'transparent',
+            border: open ? '1px solid rgba(253,186,116,0.4)' : '1px solid transparent',
+            borderRadius: '9999px',
+            cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: isMobile ? '8px' : '0.35rem 0.65rem',
+            gap: '0.4rem',
+            transition: 'background 0.2s, border-color 0.2s',
           }}
         >
-          {[0, 1, 2].map((i) => (
-            <span key={i} style={{
-              display: 'block', width: 24, height: 2,
-              background: 'rgb(254,215,170)',
-              borderRadius: 2,
-              transition: 'transform 0.3s ease, opacity 0.3s ease',
-              transform: open
-                ? i === 0 ? 'translateY(7px) rotate(45deg)'
-                  : i === 2 ? 'translateY(-7px) rotate(-45deg)'
-                  : 'scaleX(0)'
-                : 'none',
-              opacity: open && i === 1 ? 0 : 1,
-            }} />
-          ))}
+          {isMobile ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', width: 22, justifyContent: 'center' }}>
+              {[0, 1, 2].map(i => (
+                <span key={i} style={{
+                  display: 'block', width: 22, height: 2,
+                  background: 'rgb(254,215,170)', borderRadius: 2,
+                  transition: 'transform 0.3s ease, opacity 0.3s ease',
+                  transform: open
+                    ? i === 0 ? 'translateY(7px) rotate(45deg)'
+                      : i === 2 ? 'translateY(-7px) rotate(-45deg)'
+                      : 'scaleX(0)'
+                    : 'none',
+                  opacity: open && i === 1 ? 0 : 1,
+                }} />
+              ))}
+            </div>
+          ) : (
+            <>
+              <MoreHorizontal size={18} color="rgb(254,215,170)" />
+              <span style={{
+                fontFamily: 'var(--font-code)', fontSize: '0.78rem',
+                color: 'rgb(254,215,170)', fontWeight: 600, letterSpacing: '0.04em',
+              }}>
+                Menu
+              </span>
+            </>
+          )}
         </button>
       </div>
 
-      {/* Mobile slide-down menu */}
-      <div className="sm:hidden" style={{
+      {/* ── Slide-down menu ── */}
+      <div style={{
         overflow: 'hidden',
         maxHeight: open ? '400px' : '0',
         transition: 'max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
         background: 'rgba(5,5,5,0.97)',
-        borderTop: open ? '1px solid rgba(253,186,116,0.14)' : '1px solid transparent',
+        borderTop: open ? '1px solid rgba(253,186,116,0.12)' : '1px solid transparent',
       }}>
         <div style={{
-          padding: '1rem 1.25rem 1.5rem',
+          maxWidth: 1100, margin: '0 auto',
+          padding: '1rem 1.5rem 1.5rem',
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
+          gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(3, 1fr)',
           gap: '0.6rem',
         }}>
           {NAV_LINKS.map(({ label, page }) => (
             <button
               key={page}
               onClick={() => navigate(page)}
-              style={{ ...getPillStyle(activePage === page), width: '100%', textAlign: 'center', padding: '0.75rem 1rem' }}
+              style={{ ...getPillStyle(activePage === page), width: '100%', textAlign: 'center' }}
+              onMouseEnter={e => {
+                if (activePage !== page) {
+                  e.currentTarget.style.background = 'rgba(249,115,22,0.22)'
+                  e.currentTarget.style.borderColor = 'rgba(253,186,116,0.7)'
+                }
+              }}
+              onMouseLeave={e => {
+                if (activePage !== page) {
+                  e.currentTarget.style.background = 'rgba(249,115,22,0.08)'
+                  e.currentTarget.style.borderColor = 'rgba(253,186,116,0.35)'
+                }
+              }}
             >
               {label}
             </button>
