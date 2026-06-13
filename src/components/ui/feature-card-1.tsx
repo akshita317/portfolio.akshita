@@ -2,7 +2,8 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-interface AnimatedFeatureCardProps extends React.HTMLAttributes<HTMLDivElement> {
+interface AnimatedFeatureCardProps {
+  className?: string;
   index: string;
   tag: string;
   title: React.ReactNode;
@@ -34,7 +35,7 @@ const colorVariants: Record<string, React.CSSProperties> = {
 };
 
 const AnimatedFeatureCard = React.forwardRef<HTMLDivElement, AnimatedFeatureCardProps>(
-  ({ className, index, tag, title, imageSrc, color, ...props }, ref) => {
+  ({ className, index, tag, title, imageSrc, color }, ref) => {
     return (
       <motion.div
         ref={ref}
@@ -50,7 +51,6 @@ const AnimatedFeatureCard = React.forwardRef<HTMLDivElement, AnimatedFeatureCard
           hover: { y: -10, boxShadow: '0 20px 40px rgba(0,0,0,0.12)' },
         }}
         transition={{ type: "spring", stiffness: 200, damping: 15 }}
-        {...props}
       >
         {/* Background Gradient */}
         <div

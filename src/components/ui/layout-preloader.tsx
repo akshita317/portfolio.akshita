@@ -41,7 +41,6 @@ export default function LayoutPreloader({
     }, 30)
 
     // letter-by-letter name reveal
-    const nameDelay = 200
     let charIndex = 0
     const nameTimer = setInterval(() => {
       charIndex++
