@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { ExpandableSkillTags } from "@/components/ui/expandable-skill-tags";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface Skill {
   name: string;
@@ -138,6 +139,7 @@ function SkillBar({ skill, color }: { skill: Skill; color: string }) {
 }
 
 export default function SkillsSection() {
+  const isMobile = useIsMobile()
   const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
@@ -152,7 +154,7 @@ export default function SkillsSection() {
   }, [query]);
 
   return (
-    <div style={{ maxWidth: 1100, margin: "0 auto", padding: "5rem 2rem 4rem" }}>
+    <div style={{ maxWidth: 1100, margin: "0 auto", padding: isMobile ? "3rem 1rem 2.5rem" : "5rem 2rem 4rem" }}>
 
       {/* Header */}
       <motion.div
@@ -197,7 +199,7 @@ export default function SkillsSection() {
       </div>
 
       {/* Skill Categories Grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "2rem", marginBottom: "3.5rem" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))", gap: "2rem", marginBottom: "3.5rem" }}>
         {filtered.map(cat => (
           <motion.div
             key={cat.title}
@@ -240,7 +242,7 @@ export default function SkillsSection() {
         <p style={{ fontFamily: "var(--font-code)", color: "#ea580c", fontSize: "0.78rem", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "1.5rem" }}>
           // Technical Proficiency Overview
         </p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1.75rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(220px, 100%), 1fr))", gap: "1.75rem" }}>
           {Object.entries(overviewTags).map(([label, tags]) => (
             <ExpandableSkillTags key={label} title={label} skills={tags} initialCount={6} />
           ))}

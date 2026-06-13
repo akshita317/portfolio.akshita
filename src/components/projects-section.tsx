@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ProjectCard } from "@/components/ui/project-card";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const projects = [
   {
@@ -65,8 +66,9 @@ const fadeUp = {
 };
 
 export default function ProjectsSection() {
+  const isMobile = useIsMobile()
   return (
-    <div style={{ maxWidth: 1100, margin: "0 auto", padding: "5rem 2rem 4rem" }}>
+    <div style={{ maxWidth: 1100, margin: "0 auto", padding: isMobile ? "3rem 1rem 2.5rem" : "5rem 2rem 4rem" }}>
 
       {/* Header */}
       <motion.div
@@ -104,7 +106,7 @@ export default function ProjectsSection() {
       {/* Cards Grid */}
       <div style={{
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+        gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))",
         gap: "2rem",
       }}>
         {projects.map((project, i) => (

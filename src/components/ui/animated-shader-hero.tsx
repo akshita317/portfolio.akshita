@@ -280,6 +280,10 @@ const Hero: React.FC<HeroProps> = ({
           100% { background-position: 0% 50%; }
         }
         .animate-gradient { background-size: 200% 200%; animation: gradient-shift 3s ease infinite; }
+        .hero-trust-badge { display:flex; align-items:center; gap:0.5rem; padding:0.75rem 1.75rem; background:rgba(249,115,22,0.12); backdrop-filter:blur(12px); border:1px solid rgba(253,186,116,0.4); border-radius:9999px; font-size:1rem; font-weight:500; letter-spacing:0.02em; }
+        @media (max-width: 480px) {
+          .hero-trust-badge { padding: 0.5rem 1rem; font-size: 0.78rem; flex-wrap: wrap; justify-content: center; text-align: center; max-width: 90vw; }
+        }
       `}</style>
 
       <canvas
@@ -294,17 +298,7 @@ const Hero: React.FC<HeroProps> = ({
         {/* Trust Badge */}
         {trustBadge && (
           <div className="animate-fade-in-down" style={{ marginBottom: '2rem' }}>
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: '0.5rem',
-              padding: '0.75rem 1.75rem',
-              background: 'rgba(249,115,22,0.12)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(253,186,116,0.4)',
-              borderRadius: '9999px',
-              fontSize: '1rem',
-              fontWeight: 500,
-              letterSpacing: '0.02em',
-            }}>
+            <div className="hero-trust-badge">
               {trustBadge.icons?.map((icon, i) => (
                 <span key={i} style={{ fontSize: '1.1rem' }}>{icon}</span>
               ))}

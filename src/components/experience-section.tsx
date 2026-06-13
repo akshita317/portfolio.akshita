@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const experiences = [
   {
@@ -95,8 +96,15 @@ const fadeUp = {
 };
 
 export default function ExperienceSection() {
+  const isMobile = useIsMobile()
+  const dot = isMobile ? 40 : 58
+  const icon = isMobile ? 22 : 32
+  const itemGap = isMobile ? '0.75rem' : '1.75rem'
+  const cardPad = isMobile ? '1rem' : '1.75rem'
+  const lineLeft = isMobile ? 17 : 28
+
   return (
-    <div style={{ maxWidth: 900, margin: "0 auto", padding: "5rem 2rem 4rem" }}>
+    <div style={{ maxWidth: 900, margin: "0 auto", padding: isMobile ? "3rem 1rem 2.5rem" : "5rem 2rem 4rem" }}>
 
       {/* Header */}
       <motion.div
@@ -133,7 +141,7 @@ export default function ExperienceSection() {
         {/* Vertical line */}
         <div style={{
           position: "absolute",
-          left: 28,
+          left: lineLeft,
           top: 0,
           bottom: 0,
           width: 2,
@@ -150,13 +158,13 @@ export default function ExperienceSection() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.15 }}
-              style={{ display: "flex", gap: "1.75rem", alignItems: "flex-start" }}
+              style={{ display: "flex", gap: itemGap, alignItems: "flex-start" }}
             >
               {/* Timeline dot + icon */}
-              <div style={{ flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", width: 58 }}>
+              <div style={{ flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", width: dot }}>
                 <div style={{
-                  width: 58,
-                  height: 58,
+                  width: dot,
+                  height: dot,
                   borderRadius: "50%",
                   background: "#fff",
                   border: `2px solid ${exp.color}`,
@@ -170,7 +178,7 @@ export default function ExperienceSection() {
                   <img
                     src={exp.icon}
                     alt={exp.company}
-                    style={{ width: 32, height: 32, objectFit: "contain" }}
+                    style={{ width: icon, height: icon, objectFit: "contain" }}
                   />
                 </div>
               </div>
@@ -181,7 +189,7 @@ export default function ExperienceSection() {
                 background: "#fff",
                 border: "1px solid #e5e7eb",
                 borderRadius: "1.25rem",
-                padding: "1.75rem",
+                padding: cardPad,
                 boxShadow: "0 2px 12px rgba(0,0,0,0.05)",
                 transition: "box-shadow 0.25s, transform 0.25s",
               }}

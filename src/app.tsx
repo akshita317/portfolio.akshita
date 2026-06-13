@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useIsMobile } from '@/hooks/use-mobile'
 import Particles, { initParticlesEngine } from '@tsparticles/react'
 import { loadSlim } from '@tsparticles/slim'
 import Hero from '@/components/ui/animated-shader-hero'
@@ -227,8 +228,9 @@ const aboutSlides = [
 ]
 
 function AboutSection() {
+  const isMobile = useIsMobile()
   return (
-    <div style={{ maxWidth: 1100, margin: '0 auto', padding: '5rem 2rem 4rem' }}>
+    <div style={{ maxWidth: 1100, margin: '0 auto', padding: isMobile ? '2.5rem 1rem 2rem' : '5rem 2rem 4rem' }}>
       <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
         <p style={{
           fontFamily: 'var(--font-code)',
@@ -318,7 +320,7 @@ export default function App() {
       case 'experience':
         return (
           <SunnyBackground>
-            <section style={{ minHeight: 'calc(100vh - 70px)' }}>
+            <section style={{ minHeight: 'calc(100vh - 52px)' }}>
               <ExperienceSection />
             </section>
           </SunnyBackground>
@@ -327,7 +329,7 @@ export default function App() {
       case 'projects':
         return (
           <SunriseBackground>
-            <section style={{ minHeight: 'calc(100vh - 70px)' }}>
+            <section style={{ minHeight: 'calc(100vh - 52px)' }}>
               <ProjectsSection />
             </section>
           </SunriseBackground>
@@ -336,7 +338,7 @@ export default function App() {
       case 'skills':
         return (
           <SunnyBackground>
-            <section style={{ minHeight: 'calc(100vh - 70px)' }}>
+            <section style={{ minHeight: 'calc(100vh - 52px)' }}>
               <SkillsSection />
             </section>
           </SunnyBackground>

@@ -69,7 +69,7 @@ export default function ContactSection() {
   return (
     <section
       className="relative w-full overflow-hidden"
-      style={{ minHeight: 'calc(100vh - 70px)' }}
+      style={{ minHeight: 'calc(100vh - 52px)' }}
     >
       {/* ── Background image ── */}
       <div
