@@ -157,19 +157,37 @@ function Navbar({ activePage, onNavigate }: { activePage: Page; onNavigate: (p: 
         ))}
       </div>
 
-      {/* Mobile hamburger */}
-      <div style={{ padding: '0.45rem 1.5rem', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
-        className="sm:hidden">
+      {/* Mobile bar — logo + hamburger */}
+      <div className="sm:hidden" style={{
+        padding: '0.4rem 1.25rem',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        minHeight: 52,
+      }}>
         <button
-          style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '5px', padding: '4px' }}
-          onClick={() => setOpen(!open)}
+          onClick={() => navigate('home')}
+          style={{
+            background: 'none', border: 'none', cursor: 'pointer',
+            fontFamily: 'var(--font-code)', fontWeight: 700, fontSize: '1.05rem',
+            color: '#f97316', letterSpacing: '0.04em', padding: '0.25rem 0',
+          }}
+        >
+          {'<AK />'}
+        </button>
+
+        <button
+          onClick={() => setOpen(o => !o)}
+          aria-label={open ? 'Close menu' : 'Open menu'}
+          style={{
+            background: 'none', border: 'none', cursor: 'pointer',
+            display: 'flex', flexDirection: 'column', gap: '5px', padding: '8px',
+          }}
         >
           {[0, 1, 2].map((i) => (
             <span key={i} style={{
               display: 'block', width: 24, height: 2,
               background: 'rgb(254,215,170)',
               borderRadius: 2,
-              transition: '0.3s',
+              transition: 'transform 0.3s ease, opacity 0.3s ease',
               transform: open
                 ? i === 0 ? 'translateY(7px) rotate(45deg)'
                   : i === 2 ? 'translateY(-7px) rotate(-45deg)'
@@ -181,23 +199,31 @@ function Navbar({ activePage, onNavigate }: { activePage: Page; onNavigate: (p: 
         </button>
       </div>
 
-      {/* Mobile menu */}
-      {open && (
+      {/* Mobile slide-down menu */}
+      <div className="sm:hidden" style={{
+        overflow: 'hidden',
+        maxHeight: open ? '400px' : '0',
+        transition: 'max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
+        background: 'rgba(5,5,5,0.97)',
+        borderTop: open ? '1px solid rgba(253,186,116,0.14)' : '1px solid transparent',
+      }}>
         <div style={{
-          padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', alignItems: 'center',
-          background: 'rgba(5,5,5,0.96)', borderTop: '1px solid rgba(253,186,116,0.15)',
-        }} className="sm:hidden">
+          padding: '1rem 1.25rem 1.5rem',
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '0.6rem',
+        }}>
           {NAV_LINKS.map(({ label, page }) => (
             <button
               key={page}
               onClick={() => navigate(page)}
-              style={{ ...getPillStyle(activePage === page), width: '100%', textAlign: 'center' }}
+              style={{ ...getPillStyle(activePage === page), width: '100%', textAlign: 'center', padding: '0.75rem 1rem' }}
             >
               {label}
             </button>
           ))}
         </div>
-      )}
+      </div>
     </nav>
   )
 }
