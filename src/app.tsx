@@ -128,7 +128,7 @@ function Navbar({ activePage, onNavigate }: { activePage: Page; onNavigate: (p: 
     }}>
       {/* Desktop */}
       <div style={{
-        maxWidth: 1100, margin: '0 auto', padding: '1rem 2rem',
+        maxWidth: 1100, margin: '0 auto', padding: '0.45rem 2rem',
         display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.75rem',
       }} className="hidden sm:flex">
         {NAV_LINKS.map(({ label, page }) => (
@@ -157,7 +157,7 @@ function Navbar({ activePage, onNavigate }: { activePage: Page; onNavigate: (p: 
       </div>
 
       {/* Mobile hamburger */}
-      <div style={{ padding: '1rem 1.5rem', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
+      <div style={{ padding: '0.45rem 1.5rem', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
         className="sm:hidden">
         <button
           style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '5px', padding: '4px' }}
@@ -354,7 +354,7 @@ export default function App() {
     <>
       <ParticlesBackground />
       <Navbar activePage={activePage} onNavigate={navigate} />
-      <main style={{ marginTop: 70, position: 'relative', zIndex: 1 }}>
+      <main style={{ marginTop: 52, position: 'relative', zIndex: 1 }}>
         <div key={activePage} className="page-fade-in">
           {renderPage()}
         </div>
